@@ -23,36 +23,27 @@ operateButtons.forEach(button => {
     button.addEventListener("click", () => {
         const value = button.textContent;
         
+        // clear calculator
         if(value === "CLEAR"){
             clearAll();
             return;
         }
-
+        // equals sign
         if(value === "="){
             equals();
             return;
         }
-        
         // "+,-,/,*"
-        if(value !=="" && value !=="."){
-            if(x !== null && operator !== null){
-                y = Number(currentInput);
-                x = operate();
-                display.textContent = x;
-            } else {
-                x = Number(currentInput);
-            }
-
-            operator = value;
-            currentInput = "";
+        operations(value);
+        
+        // decimal point
+        if(value ==="."){
+            decimal();
+            return;
         }
 
-        if(value ==="."){
-            if(!currentInput.includes(".")){
-                currentInput += button.textContent;
-                display.textContent = currentInput;
-            }
-            return;
+        if(value === "UNDO"){
+            undo();
         }
     });
 });
@@ -65,7 +56,20 @@ function operate(){
     if(operator ==="/") return divide(x,y);
     if(operator ==="*") return multiply(x,y);
 }
+function operations(value){
+    if(currentInput === "") return;
 
+    if(x !== null && operator !== null){
+        y = Number(currentInput);
+        x = operate();
+        display.textContent = x;
+    } else {
+        x = Number(currentInput);
+    }
+
+    operator = value;
+    currentInput = "";
+}
 // Calculate Functions (+,-,*,/)
 function add(x,y){
     return x+y;
@@ -96,4 +100,14 @@ function equals(){
         currentInput = "";
         operator = null;
     }
+}
+function decimal(){
+    if(!currentInput.includes(".")){
+        currentInput += button.textContent;
+        display.textContent = currentInput;
+    }
+}
+function undo(){
+    currentInput = currentInput.slice(0,-1);
+    display.textContent = currentInput || "0";
 }
