@@ -48,11 +48,12 @@ operateButtons.forEach(button => {
         }
 
         if(value ==="."){
-            currentInput += button.textContent;
-            display.textContent = currentInput;
+            if(!currentInput.includes(".")){
+                currentInput += button.textContent;
+                display.textContent = currentInput;
+            }
+            return;
         }
-
-
     });
 });
 
