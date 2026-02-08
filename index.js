@@ -1,56 +1,98 @@
-// Takes in User Input
-function input(){
-    let x  = prompt("Enter the first number.")
-    let operator = prompt("Enter the operator.")
-    let y = prompt("Enter the second number.")
-    
-    // Applies Operation
-    let result = operate(x,y,operator);
-    // Displays the Result
-    alert("Result: " + result);
-}
+// Grabs every button inside class Numbers
+const numberButtons = document.querySelectorAll(".numbers button")
+const operateButtons = document.querySelectorAll(".operators button");
+const display = document.getElementById("display")
 
-// Applies Operation
-function operate(x,y,operator){
-    // Return Calculation
-    if(operator == "+")
-        result = add(x,y);
-    else if(operator == "-")
-        result = subtract(x,y);
-    
-    else if(operator == "*")
-        result = multiply(x,y);
-    
-    else if(operator == "/")
-        result = divide(x,y);
+// Resets to Default
+let currentInput = "";
+let x =null;
+let y = null;
+let operator = null;
+let list = []
 
-    return result;
+// Number Buttons
+numberButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        currentInput += button.textContent;
+        display.textContent = currentInput;
+    });
+});
+
+// Operate Buttons
+operateButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        const value = button.textContent;
+        
+        if(value === "CLEAR"){
+            clearAll();
+            return;
+        }
+
+        if(value === "="){
+            equals();
+            return;
+        }
+        
+        // "+,-,/,*"
+        if(value !=="" && value !=="."){
+            if(x !== null && operator !== null){
+                y = Number(currentInput);
+                x = operate();
+                display.textContent = x;
+            } else {
+                x = Number(currentInput);
+            }
+
+            operator = value;
+            currentInput = "";
+        }
+
+        if(value ==="."){
+            currentInput += button.textContent;
+            display.textContent = currentInput;
+        }
+
+
+    });
+});
+
+
+//operation
+function operate(){
+    if(operator ==="+") return add(x,y);
+    if(operator ==="-") return subtract(x,y);
+    if(operator ==="/") return divide(x,y);
+    if(operator ==="*") return multiply(x,y);
 }
 
 // Calculate Functions (+,-,*,/)
 function add(x,y){
     return x+y;
 }
-
 function subtract(x,y){
     return x-y
 }
-
 function multiply(x,y){
     return (x*y)
 }
-
 function divide(x,y){
     return (x/y)
 }
+function clearAll(){
+    currentInput = "";
+    x = null;
+    y = null;
+    operator = null;
+    display.textContent ="0";
+}
+function equals(){
+    if(x!==null && operator !==null && currentInput !==""){
+        y = Number(currentInput);
+        const result = operate();
+        display.textContent = result;
 
-input();
-
-// console.log(add(x,y))
-// console.log(substract(x,y))
-// console.log(multiply(x,y))
-// console.log(divide(x,y))
-
-// document.write(add(x,y) + "<br>")
-// document.write(add(x,y))
-
+        x = result;
+        currentInput = "";
+        operator = null;
+    }
+}
